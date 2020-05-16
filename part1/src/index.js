@@ -6,6 +6,8 @@ const Statistics = (props) => {
 	if (props.allClicks === 0) {
 	  return (
 		<>
+		<h1>Statistics</h1>
+		<p>No feedback given</p>
 		</>
 	  )
 	} else {
