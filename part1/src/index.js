@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+import './index.css';
 
 const Statistic = (props) => {
 	return (
 		<>
-		<p>{props.text} {props.value}</p>
+		<tr>
+			<th align="left" className="font-weight-normal">{props.text}</th>
+			<th align="left" className="font-weight-normal">{props.value}</th>
+		</tr>
 		</>
 	)
 }
@@ -18,11 +22,15 @@ const Statistics = (props) => {
 	} else {
 		return (
 			<>
-			<Statistic text="Good" value={props.good}/>
-			<Statistic text="Neutral" value={props.neutral}/>
-			<Statistic text="Bad" value={props.bad}/>
-			<Statistic text="Average" value={props.average}/>
-			<Statistic text="Positive" value={props.positive+'%'}/>
+			<table>
+			<tbody>
+				<Statistic text="Good" value={props.good}/>
+				<Statistic text="Neutral" value={props.neutral}/>
+				<Statistic text="Bad" value={props.bad}/>
+				<Statistic text="Average" value={props.average}/>
+				<Statistic text="Positive" value={props.positive+'%'}/>
+			</tbody>
+			</table>
 			</>
 		)
 
