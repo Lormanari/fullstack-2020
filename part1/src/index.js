@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const History = (props) => {
+const Statistics = (props) => {
 
 	if (props.allClicks === 0) {
 	  return (
@@ -48,7 +48,7 @@ const App = () => {
 	  <Button handleClick={handleClick(neutral + 1, allClicks + 1, setNeutral)} text='Neutral' />
 	  <Button handleClick={handleClick(bad + 1, allClicks + 1, setBad)} text='Bad' />
 
-	  <History allClicks={allClicks} good={good} neutral={neutral} bad={bad} average={average} positive={positive}/>
+	  <Statistics allClicks={allClicks} good={good} neutral={neutral} bad={bad} average={average} positive={positive}/>
     </div>
   )
 }
