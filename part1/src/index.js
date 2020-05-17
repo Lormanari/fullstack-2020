@@ -2,17 +2,41 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import './index.css';
 
+const MostVote = (props) => {
 
+	if(props.clicks === 0) {
+		return (
+			<></>
+		)
+	}
+	return (
+		<>
+		<h1>Anecdote with most votes</h1>
+		<p>{props.anecdotes[props.mostVoteItem]}</p>
+		<p>has {props.points[props.mostVoteItem]} votes</p>
+		</>
+	)
+}
 const App = (props) => {
 	const [selected, setSelected] = useState({
-		select:0,
-		points:new Array(6).fill(0)
+		select: 0,
+		points: new Array(6).fill(0),
+		clicks: 0,
+		mostVoteItem: -1,
 	})
 
 	const addVote = (selectedItem) => {
 		const pointsCopy = [...selected.points]
 		pointsCopy[selectedItem] +=1
-		setSelected({...selected, points: pointsCopy})
+		const mostVote = Math.max(...pointsCopy)
+		const mostVoteItem = pointsCopy.findIndex((val) => val === mostVote)
+
+		setSelected({
+			...selected,
+			points: pointsCopy,
+			clicks: selected.clicks + 1,
+			mostVoteItem,
+		})
 	}
 
 
@@ -22,10 +46,13 @@ const App = (props) => {
 
 	return (
 	  <div>
+		<h1>Anecdote of the day</h1>
 		<p>{props.anecdotes[selected.select]}</p>
 		<p>has {selected.points[selected.select]} votes</p>
 		<button onClick={() => addVote(selected.select)}>Vote</button>
 		<button onClick={() => setToValue(Math.floor(Math.random() * 6))}>Next anecdote</button>
+
+		<MostVote clicks={selected.clicks} anecdotes={anecdotes} points={selected.points} mostVote={selected.mostVote} mostVoteItem={selected.mostVoteItem}/>
 	  </div>
 	)
   }
