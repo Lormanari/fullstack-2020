@@ -4,19 +4,28 @@ import './index.css';
 
 
 const App = (props) => {
-	const [selected, setSelected] = useState(0)
-	// function getRandomNumber() {
-	// 	return Math.floor(Math.random() * 6)
-	// }
-	const setToValue = (newValue) => {
-		setSelected(newValue)
+	const [selected, setSelected] = useState({
+		select:0,
+		points:new Array(6).fill(0)
+	})
+
+	const addVote = (selectedItem) => {
+		const pointsCopy = [...selected.points]
+		pointsCopy[selectedItem] +=1
+		setSelected({...selected, points: pointsCopy})
 	}
 
-	console.log(selected)
+
+	const setToValue = (newValue) => {
+		setSelected({...selected, select: newValue})
+	}
+
 	return (
 	  <div>
-		<p>{props.anecdotes[selected]}</p>
-		<button onClick={() => setToValue(Math.floor(Math.random() * 6))}>next anecdote</button>
+		<p>{props.anecdotes[selected.select]}</p>
+		<p>has {selected.points[selected.select]} votes</p>
+		<button onClick={() => addVote(selected.select)}>Vote</button>
+		<button onClick={() => setToValue(Math.floor(Math.random() * 6))}>Next anecdote</button>
 	  </div>
 	)
   }
