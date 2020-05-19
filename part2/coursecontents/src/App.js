@@ -1,5 +1,5 @@
 import React from 'react';
-import Course from './components/Content'
+import Content from './components/Content'
 
 const App = () => {
 	const course = {
@@ -20,11 +20,16 @@ const App = () => {
 		  name: 'State of a component',
 		  exercises: 14,
 		  id: 3
+		},
+		{
+			name: 'Redux',
+			exercises: 11,
+			id: 4
 		}
 	  ]
 	}
 
-	return <Course course={course} />
+	return <Content course={course} />
   }
 
 export default App;
