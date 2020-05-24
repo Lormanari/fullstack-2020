@@ -1,5 +1,5 @@
 import React from 'react';
-import Content from './components/Content'
+import Course from './components/Course'
 
 const App = () => {
 	const courses = [
@@ -49,7 +49,7 @@ const App = () => {
 
 	 return (
 		 <>
-		 {courses.map((course) => <Content key={course.id} course={course} /> )}
+		 {courses.map((course) => <Course key={course.id} course={course} /> )}
 		 </>
 	 )
 }
