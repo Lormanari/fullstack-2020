@@ -16,7 +16,14 @@ const App = () => {
 		const nameObject = {
 			name: newName,
 		}
-		setPersons(persons.concat(nameObject))
+		const names = []
+		persons.map((person) => names.push(person.name))
+
+		if (names.includes(newName)) {
+			alert(`${newName} already added to phonebook`)
+		} else {
+			setPersons(persons.concat(nameObject))
+		}
 		setNewName('')
 	}
 	return (
