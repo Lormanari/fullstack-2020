@@ -5,22 +5,32 @@ import Filter from './components/Filter'
 import Notification from './components/Notification'
 import Countries from './components/Countries'
 import OneCountry from './components/OneCountry'
+import ShowCountry from './components/ShowCountry'
 
 const App = () => {
 	const [ countries, setCountries ] = useState([])
 	const [ showFiltered, setshowFiltered ] = useState('')
+	const [ showCountry, setshowCountry ] = useState()
 
 	useEffect(() => {
 		axios
 		.get('https://restcountries.eu/rest/v2/all')
 		.then(response => {
 			setCountries(response.data)
-			console.log(response.data)
 		})
 	}, [])
 
 	const HandleFilterQueryChange = (event) => {
 		setshowFiltered(event.target.value)
+		setshowCountry()
+	}
+
+	const handleClick = (cou) => {
+		if(matchedCountries.length === 1) {
+			setshowCountry()
+		} else {
+			setshowCountry(cou)
+		}
 	}
 
 	const matchedCountries = countries.filter(country => country.name.toLowerCase().indexOf(showFiltered) >= 0)
@@ -31,9 +41,10 @@ const App = () => {
 	return (
 	  <div>
 		<Filter query={showFiltered} changehandler={HandleFilterQueryChange} />
-		<Countries filteredCountries={filteredCountries}/>
+		<Countries filteredCountries={filteredCountries} handleClick={handleClick}/>
 		<Notification note={moreThanTenNotification}/>
 		<OneCountry country={onlyOneCountry} />
+		<ShowCountry country={showCountry} />
 	  </div>
 	)
   }
