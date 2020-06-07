@@ -53,8 +53,20 @@ const App = () => {
 		const names = []
 		persons.map((person) => names.push(person.name))
 
+
 		if (names.includes(newName)) {
-			alert(`${newName} already added to phonebook`)
+
+			const confirmNewPhone = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+			if(confirmNewPhone === true) {
+				const id = persons.find(x => x.name === newName).id
+				const person = persons.find(p => p.id === id)
+				const changedPerson = {...person, number: newNumber}
+				personService
+				.update(id, changedPerson)
+				.then(returnedPerson => {
+					setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+				})
+			}
 		} else {
 			// axios.post('http://localhost:3001/persons', personObject)
 			personService
