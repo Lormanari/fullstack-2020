@@ -3,10 +3,15 @@ import './index.css'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
 	const [ persons, setPersons ] = useState([])
+	const [ newName, setNewName ] = useState('')
+	const [ newNumber, setNewNumber ] = useState('')
+	const [ showFiltered, setshowFiltered ] = useState('')
+	const [errorMessage, setErrorMessage] = useState(null)
 
 	useEffect(() => {
 		// axios
@@ -17,10 +22,6 @@ const App = () => {
 			setPersons(initialPersons)
 		})
 	}, [])
-
-	const [ newName, setNewName ] = useState('')
-	const [ newNumber, setNewNumber ] = useState('')
-	const [ showFiltered, setshowFiltered ] = useState('')
 
 	const handleNameChange = (event) => {
 		setNewName(event.target.value)
@@ -65,6 +66,10 @@ const App = () => {
 				.update(id, changedPerson)
 				.then(returnedPerson => {
 					setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+					setErrorMessage(`${returnedPerson.name}'s number is updated`)
+					setTimeout(() => {
+						setErrorMessage(null)
+					}, 5000)
 				})
 			}
 		} else {
@@ -73,6 +78,10 @@ const App = () => {
 			.create(personObject)
 			.then(returnedPerson => {
 				setPersons(persons.concat(returnedPerson))
+				setErrorMessage(`Added ${returnedPerson.name}`)
+				setTimeout(() => {
+					setErrorMessage(null)
+				  }, 5000)
 			})
 		}
 		setNewName('')
@@ -83,6 +92,7 @@ const App = () => {
 	return (
 	  <div>
 		<h2>Phonebook</h2>
+		<Notification message={errorMessage} />
 		{/* <p>Filter shown with <input value={showFiltered} onChange={HandleFilterQueryChange}/></p> */}
 		<Filter query={showFiltered} changehandler={HandleFilterQueryChange} />
 		<h2>Add a new</h2>

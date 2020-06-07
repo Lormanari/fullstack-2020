@@ -18,3 +18,8 @@ code {
 .mt-0 {
 	margin-top: 0rem;
 }
+
+.error {
+	background-color: lightskyblue;
+	padding: 1rem;
+}
