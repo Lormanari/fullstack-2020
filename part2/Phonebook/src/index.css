@@ -19,7 +19,12 @@ code {
 	margin-top: 0rem;
 }
 
-.error {
+.message {
 	background-color: lightskyblue;
+	padding: 1rem;
+}
+
+.error {
+	background-color: lightcoral;
 	padding: 1rem;
 }

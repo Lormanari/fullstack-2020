@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Notification from './components/Notification'
+import Showerror from './components/Showerror'
 import personService from './services/persons'
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
 	const [ newNumber, setNewNumber ] = useState('')
 	const [ showFiltered, setshowFiltered ] = useState('')
 	const [errorMessage, setErrorMessage] = useState(null)
+	const [Message, setMessage] = useState(null)
 
 	useEffect(() => {
 		// axios
@@ -66,10 +68,17 @@ const App = () => {
 				.update(id, changedPerson)
 				.then(returnedPerson => {
 					setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
-					setErrorMessage(`${returnedPerson.name}'s number is updated`)
+					setMessage(`${returnedPerson.name}'s number is updated`)
+					setTimeout(() => {
+						setMessage(null)
+					}, 5000)
+				})
+				.catch(error => {
+					setErrorMessage(`Information of '${person.name}' has already been removed from server`)
 					setTimeout(() => {
 						setErrorMessage(null)
 					}, 5000)
+					setPersons(persons.filter(p => p.id !== id))
 				})
 			}
 		} else {
@@ -78,9 +87,9 @@ const App = () => {
 			.create(personObject)
 			.then(returnedPerson => {
 				setPersons(persons.concat(returnedPerson))
-				setErrorMessage(`Added ${returnedPerson.name}`)
+				setMessage(`Added ${returnedPerson.name}`)
 				setTimeout(() => {
-					setErrorMessage(null)
+					setMessage(null)
 				  }, 5000)
 			})
 		}
@@ -92,7 +101,8 @@ const App = () => {
 	return (
 	  <div>
 		<h2>Phonebook</h2>
-		<Notification message={errorMessage} />
+		<Notification message={Message} />
+		<Showerror message={errorMessage} />
 		{/* <p>Filter shown with <input value={showFiltered} onChange={HandleFilterQueryChange}/></p> */}
 		<Filter query={showFiltered} changehandler={HandleFilterQueryChange} />
 		<h2>Add a new</h2>
