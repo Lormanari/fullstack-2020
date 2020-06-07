@@ -1,10 +1,10 @@
 import React from 'react'
 import SinglePerson from './SinglePerson'
 
-const Persons = ({filteredPersons}) => {
+const Persons = ({filteredPersons, deletePerson}) => {
 	return (
 		<>
-		{filteredPersons.map((filteredperson) => <SinglePerson key={filteredperson.name} person={filteredperson}/>)}
+		{filteredPersons.map((filteredperson) => <SinglePerson key={filteredperson.id} person={filteredperson} deletePerson={() => deletePerson(filteredperson.id, filteredperson.name)}/>)}
 		</>
 	)
 }

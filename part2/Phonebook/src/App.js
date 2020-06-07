@@ -32,6 +32,18 @@ const App = () => {
 		setshowFiltered(event.target.value)
 	}
 
+	const deletePerson = (id, person) => {
+		const r = window.confirm(`delete ${person}?`)
+		if(r === true) {
+			personService
+			.remove(id)
+			.then(() => {
+				setPersons(persons.filter(p => p.id !== id))
+			})
+
+		}
+	}
+
 	const addName = (event) => {
 		event.preventDefault()
 		const personObject = {
@@ -65,7 +77,7 @@ const App = () => {
 		<PersonForm addName={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
 
 		<h2>Numbers</h2>
-		<Persons filteredPersons={filteredPersons}/>
+		<Persons filteredPersons={filteredPersons} deletePerson={deletePerson} />
 		{/* {filteredPersons.map((person) => <p className='mt-0 mb-5' key={person.name}>{person.name} {person.number}<br></br></p>)} */}
 
 	  </div>
