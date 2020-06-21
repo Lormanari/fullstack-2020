@@ -65,12 +65,24 @@ const generateId = (min, max) => {
   	max = Math.ceil(max);
   	return Math.floor(Math.random() * (max - min)) + min;
 }
+
+const hasPerson = (newperson) => {
+	const names = persons.map(person => person.name.toLowerCase())
+	console.log(names)
+	return names.includes(newperson)
+}
 app.post('/api/persons', (req, res) => {
 	const body = req.body
-	if(!body.name) {
+	console.log(body.name)
+	console.log(hasPerson(body.name))
+	if(!body.name || !body.number) {
 		  return res.status(400).json({
-			  error: 'Person name is missing'
+			  error: 'Person name or number is missing'
 		  })
+	} else if (hasPerson(body.name.toLowerCase())) {
+		return res.status(400).json({
+			error: 'name must be unique'
+		})
 	}
 
 	const person = {
