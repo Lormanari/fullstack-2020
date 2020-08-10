@@ -62,6 +62,8 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/api/persons/:id',(req, res, next) => {
+	console.log(typeof req.params.id)
+	console.log(req.params.id)
 	Person
 	.findById(req.params.id)
 	.then(person => {
@@ -88,37 +90,76 @@ const generateId = (min, max) => {
   	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const hasPerson = (newperson) => {
-	const names = persons.map(person => person.name.toLowerCase())
-	console.log(names)
-	return names.includes(newperson)
-}
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
 	const body = req.body
-	console.log(body.name)
-	console.log(hasPerson(body.name))
-	if(!body.name || !body.number) {
-		  return res.status(400).json({
-			  error: 'Person name or number is missing'
-		  })
-	} else if (hasPerson(body.name.toLowerCase())) {
-		return res.status(400).json({
-			error: 'name must be unique'
-		})
-	}
-
 	const person = new Person({
 		name: body.name,
 		number: body.number,
 	})
-	// persons = persons.concat(person)
 
-	// res.json(person)
-	person.save().then(savedPerson => {
-		res.json(savedPerson.toJSON())
+
+	Person.find({})
+		.then(persons => {
+			const names = persons.map(person => person.name.toLowerCase())
+
+			if(!body.name || !body.number) {
+				return res.status(400).json({
+					error: 'Person name or number is missing'
+				})
+			} else if (names.includes(body.name.toLowerCase())) {
+
+				return res.status(400).json({
+					error: 'name must be unique'
+				})
+
+				// Person.find({name: body.name}).then(persons => {
+				// 	persons.forEach(selectedPerson => {
+				// 		existedID = selectedPerson.id
+				// 	})
+
+				// 	hasName = true
+				// 	newName = body.name
+				// 	newNumber = body.number
+
+				// 	updateName(existedID, newName, newNumber)
+
+				// })
+
+
+
+
+			} else {
+				// persons = persons.concat(person)
+
+				// res.json(person)
+				person.save().then(savedPerson => {
+					res.json(savedPerson.toJSON())
+				})
+			}
 	})
+
+
+
 })
+
+app.put('/api/persons/:id', (req, res, next) => {
+	const body = req.body
+
+	const person = {
+		name: body.name,
+		number: body.number,
+	}
+	console.log(res)
+	Person.findByIdAndUpdate(req.params.id, person, { upsert: true })
+	.then(updatedPerson => {
+		res.json(updatedPerson.toJSON())
+		console.log('Phone updated')
+	})
+	.catch(error => next(error))
+})
+
+
 
 const unknownEndpoint = (req, res) => {
 	res.status(404).send({ error: 'unknown endpoint' })
