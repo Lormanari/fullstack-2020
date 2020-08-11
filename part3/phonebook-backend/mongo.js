@@ -12,8 +12,10 @@ const number = process.argv[4]
 const url =
   `mongodb+srv://fullstack:${password}@cluster0.emxpr.mongodb.net/phonebook?retryWrites=true&w=majority`
 
+mongoose.set('useCreateIndex', true)
 mongoose
-.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+.connect(url, { useNewUrlParser: true, useUnifiedTopology: true,})
+
 
 const personSchema = new mongoose.Schema({
   name: String,

@@ -98,49 +98,50 @@ app.post('/api/persons', (req, res, next) => {
 		number: body.number,
 	})
 
+	person.save()
+		.then(savedPerson => savedPerson.toJSON())
+		.then(savedAndFormattedPerson => res.json(savedAndFormattedPerson))
+		.catch(error => next(error))
 
-	Person.find({})
-		.then(persons => {
-			const names = persons.map(person => person.name.toLowerCase())
+	// Person.find({})
+	// 	.then(persons => {
+	// 		const names = persons.map(person => person.name.toLowerCase())
 
-			if(!body.name || !body.number) {
-				return res.status(400).json({
-					error: 'Person name or number is missing'
-				})
-			} else if (names.includes(body.name.toLowerCase())) {
+	// 		if(!body.name || !body.number) {
+	// 			return res.status(400).json({
+	// 				error: 'Person name or number is missing'
+	// 			})
+	// 		} else if (names.includes(body.name.toLowerCase())) {
 
-				return res.status(400).json({
-					error: 'name must be unique'
-				})
+	// 			return res.status(400).json({
+	// 				error: 'name must be unique'
+	// 			})
 
-				// Person.find({name: body.name}).then(persons => {
-				// 	persons.forEach(selectedPerson => {
-				// 		existedID = selectedPerson.id
-				// 	})
+	// 			// Person.find({name: body.name}).then(persons => {
+	// 			// 	persons.forEach(selectedPerson => {
+	// 			// 		existedID = selectedPerson.id
+	// 			// 	})
 
-				// 	hasName = true
-				// 	newName = body.name
-				// 	newNumber = body.number
+	// 			// 	hasName = true
+	// 			// 	newName = body.name
+	// 			// 	newNumber = body.number
 
-				// 	updateName(existedID, newName, newNumber)
+	// 			// 	updateName(existedID, newName, newNumber)
 
-				// })
-
-
-
-
-			} else {
-				// persons = persons.concat(person)
-
-				// res.json(person)
-				person.save().then(savedPerson => {
-					res.json(savedPerson.toJSON())
-				})
-			}
-	})
+	// 			// })
 
 
 
+
+	// 		} else {
+	// 			// persons = persons.concat(person)
+
+	// 			// res.json(person)
+	// 			person.save().then(savedPerson => {
+	// 				res.json(savedPerson.toJSON())
+	// 			})
+	// 		}
+	// })
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -172,6 +173,8 @@ const errorHandler = (error, req, res, next) => {
 
 	if (error.name === 'CastError' && error.kind == 'ObjectId') {
 		return res.status(400).send({ error: 'malformatted id' })
+	} else if(error.name === 'ValidationError') {
+		return res.status(400).json({error: error.message})
 	}
 
 	next(error)
