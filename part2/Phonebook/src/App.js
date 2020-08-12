@@ -101,6 +101,7 @@ const App = () => {
 			.then(returnedPerson => {
 				setPersons(persons.concat(returnedPerson))
 				setMessage(`Added ${returnedPerson.name}`)
+				setErrorMessage(null)
 				setTimeout(() => {
 					setMessage(null)
 				  }, 5000)
