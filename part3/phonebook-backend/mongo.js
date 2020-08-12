@@ -14,7 +14,7 @@ const url =
 
 mongoose.set('useCreateIndex', true)
 mongoose
-.connect(url, { useNewUrlParser: true, useUnifiedTopology: true,})
+  .connect(url, { useNewUrlParser: true, useUnifiedTopology: true, })
 
 
 const personSchema = new mongoose.Schema({
@@ -37,17 +37,17 @@ const person = new Person({
 
 
 if(name && number) {
-	person.save().then(result => {
-	console.log(`added ${result.name} number ${result.number} to phonebook`)
-	mongoose.connection.close()
-	})
+  person.save().then(result => {
+    console.log(`added ${result.name} number ${result.number} to phonebook`)
+    mongoose.connection.close()
+  })
 } else {
-	Person.find({}).then(persons => {
-		const contacts = persons.map(person => {
-			return `${person.name} ${person.number}`
-		}).join('\n')
-		console.log(`phonebook:\n${contacts}`)
-		mongoose.connection.close()
-	})
+  Person.find({}).then(persons => {
+    const contacts = persons.map(person => {
+      return `${person.name} ${person.number}`
+    }).join('\n')
+    console.log(`phonebook:\n${contacts}`)
+    mongoose.connection.close()
+  })
 }
 
