@@ -152,14 +152,13 @@ app.put('/api/persons/:id', (req, res, next) => {
 		number: body.number,
 	}
 	console.log(res)
-	Person.findByIdAndUpdate(req.params.id, person, { upsert: true })
+	Person.findByIdAndUpdate(req.params.id, person, { upsert: true, runValidators: true })
 	.then(updatedPerson => {
 		res.json(updatedPerson.toJSON())
 		console.log('Phone updated')
 	})
 	.catch(error => next(error))
 })
-
 
 
 const unknownEndpoint = (req, res) => {

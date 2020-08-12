@@ -57,33 +57,46 @@ const App = () => {
 		persons.map((person) => names.push(person.name))
 
 
-		if (names.includes(newName)) {
+		// if (names.includes(newName)) {
 
-			const confirmNewPhone = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
-			if(confirmNewPhone === true) {
-				const id = persons.find(x => x.name === newName).id
-				const person = persons.find(p => p.id === id)
-				const changedPerson = {...person, number: newNumber}
-				personService
-				.update(id, changedPerson)
-				.then(returnedPerson => {
-					setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
-					setMessage(`${returnedPerson.name}'s number is updated`)
-					setTimeout(() => {
-						setMessage(null)
-					}, 5000)
-				})
-				.catch(error => {
-					setErrorMessage(`Information of '${person.name}' has already been removed from server`)
-					setTimeout(() => {
-						setErrorMessage(null)
-					}, 5000)
-					setPersons(persons.filter(p => p.id !== id))
-				})
-			}
-		} else {
-			// axios.post('http://localhost:3001/persons', personObject)
-			personService
+		// 	const confirmNewPhone = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+		// 	if(confirmNewPhone === true) {
+		// 		const id = persons.find(x => x.name === newName).id
+		// 		const person = persons.find(p => p.id === id)
+		// 		const changedPerson = {...person, number: newNumber}
+		// 		personService
+		// 		.update(id, changedPerson)
+		// 		.then(returnedPerson => {
+		// 			setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+		// 			setMessage(`${returnedPerson.name}'s number is updated`)
+		// 			setTimeout(() => {
+		// 				setMessage(null)
+		// 			}, 5000)
+		// 		})
+		// 		.catch(error => {
+		// 			setErrorMessage(`Information of '${person.name}' has already been removed from server`)
+		// 			setTimeout(() => {
+		// 				setErrorMessage(null)
+		// 			}, 5000)
+		// 			setPersons(persons.filter(p => p.id !== id))
+		// 		})
+		// 	}
+		// } else {
+		// 	// axios.post('http://localhost:3001/persons', personObject)
+		// 	personService
+		// 	.create(personObject)
+		// 	.then(returnedPerson => {
+		// 		setPersons(persons.concat(returnedPerson))
+		// 		setMessage(`Added ${returnedPerson.name}`)
+		// 		setTimeout(() => {
+		// 			setMessage(null)
+		// 		  }, 5000)
+		// 	})
+		// 	.catch(error => {
+		// 		console.log(error.response.data)
+		// 	})
+		// }
+		personService
 			.create(personObject)
 			.then(returnedPerson => {
 				setPersons(persons.concat(returnedPerson))
@@ -92,7 +105,10 @@ const App = () => {
 					setMessage(null)
 				  }, 5000)
 			})
-		}
+			.catch(error => {
+				console.log(error.response.data)
+				setErrorMessage(error.response.data.error)
+			})
 		setNewName('')
 		setNewNumber('')
 	}

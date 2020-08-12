@@ -17,8 +17,17 @@ mongoose
 })
 
 const personSchema = new mongoose.Schema({
-	name: {type: String, required: true, unique: true },
-  	number: String,
+	name: {type: String, minlength: 3, required: true, unique: true },
+  	number: {
+		type: Number,
+		required: true,
+		validate: {
+			validator: function(v) {
+			  return /^([0-9]{8,}$)/.test(v);
+			},
+			message: props => `${props.value} is shorter than the minimum allowed digits (8)!`
+		},
+	},
 })
 
 personSchema.plugin(uniqueValidator)
