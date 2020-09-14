@@ -1,0 +1,9 @@
+PUT http://localhost:3001/api/blogs/5f5fc810880f7c266b21670f
+Content-Type: application/json
+
+{
+	"title": "Finland taking in 11 underage asylum seekers from fire-devastated Greek camp",
+	"author": "Yle",
+	"url":"https://yle.fi/uutiset/osasto/news/finland_taking_in_11_underage_asylum_seekers_from_fire-devastated_greek_camp/11539172",
+	"likes": 150
+}
