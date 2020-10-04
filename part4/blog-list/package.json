@@ -22,7 +22,8 @@
   "devDependencies": {
     "eslint": "^7.9.0",
     "jest": "^25.5.4",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "supertest": "^5.0.0"
   },
   "jest": {
     "testEnvironment": "node"
