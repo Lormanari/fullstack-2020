@@ -61,10 +61,28 @@ test('a valid blog can be added', async () => {
 
 	//refactor
 	const blogsAtEnd = await helper.blogsInDb()
+
 	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
 	const titles = blogsAtEnd.map(n => n.title)
 	expect(titles).toContain('React patterns')
+})
+
+test('missing likes property will get a default value 0', async () => {
+	const newBlog = {
+		title: 'React patterns',
+		author: 'Michael Chan',
+		url: 'https://reactpatterns.com/',
+	}
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(200)
+		.expect('Content-Type', /application\/json/)
+
+	const blogsAtEnd = await helper.blogsInDb()
+	expect(blogsAtEnd[helper.initialBlogs.length].likes).toBe(0)
 })
 
 afterAll(() => {

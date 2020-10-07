@@ -22,12 +22,15 @@ blogsRouter.get('/:id', (req, res, next) => {
 blogsRouter.post('/', (req, res, next) => {
 	const body = req.body
 
+	const likes = body.likes === undefined ? 0 : body.likes
+
 	const blog = new Blog({
 		title: body.title,
 		author: body.author,
 		url: body.url,
-		likes: body.likes
+		likes
 	})
+
 
 	blog.save()
 		.then(savedBlog => {
