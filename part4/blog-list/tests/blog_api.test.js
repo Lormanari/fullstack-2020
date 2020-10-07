@@ -85,6 +85,18 @@ test('missing likes property will get a default value 0', async () => {
 	expect(blogsAtEnd[helper.initialBlogs.length].likes).toBe(0)
 })
 
+test('400 Bad Request when title and url are missing', async () => {
+	const newBlog = {
+		author: 'Michael Chan',
+		likes: 7,
+	}
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(400)
+})
+
 afterAll(() => {
 	mongoose.connection.close()
 })

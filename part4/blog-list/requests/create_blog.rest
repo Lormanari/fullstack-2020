@@ -2,8 +2,6 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-	"title": "Up to 10% decline in cancer specialist visits during crisis in HUS district",
 	"author": "Yle",
-	"url": "https://yle.fi/uutiset/osasto/news/up_to_10_decline_in_cancer_specialist_visits_during_crisis_in_hus_district/11543758",
 	"likes": 120
 }

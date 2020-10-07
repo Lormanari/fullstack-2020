@@ -22,6 +22,11 @@ blogsRouter.get('/:id', (req, res, next) => {
 blogsRouter.post('/', (req, res, next) => {
 	const body = req.body
 
+	if(body.title === undefined && body.url === undefined) {
+		return res.status(400).json({
+			error: 'blog title and url are missing'
+		})
+	}
 	const likes = body.likes === undefined ? 0 : body.likes
 
 	const blog = new Blog({
