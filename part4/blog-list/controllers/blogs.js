@@ -44,15 +44,12 @@ blogsRouter.post('/', (req, res, next) => {
 		.catch(error => next(error))
 })
 
-blogsRouter.delete('/:id', (req, res, next) => {
-	Blog.findByIdAndRemove(req.params.id)
-		.then(() => {
-			res.status(204).end()
-		})
-		.catch(error => next(error))
+blogsRouter.delete('/:id', async (req, res) => {
+	await Blog.findByIdAndRemove(req.params.id)
+	res.status(204).end()
 })
 
-blogsRouter.put('/:id', (req, res, next) => {
+blogsRouter.put('/:id', async (req, res) => {
 	const body = req.body
 
 	const blog = {
@@ -62,11 +59,9 @@ blogsRouter.put('/:id', (req, res, next) => {
 		likes: body.likes
 	}
 
-	Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
-		.then(updatedBlog => {
-			res.json(updatedBlog.toJSON())
-		})
-		.catch(error => next(error))
+	const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
+	res.json(updatedBlog.toJSON())
+
 })
 
 module.exports = blogsRouter
