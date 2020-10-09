@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-	"title": "Things I don't know as of 2018",
-	"author": "Dan abramov",
-	"url": "https://yle.fi/uutiset/osasto/news/up_to_10_decline_in_cancer_specialist_visits_during_crisis_in_hus_district/11543758",
-	"likes": 20
+	"title": "A promising 3D-printing method gets flexible",
+	"author": "MATERIALS SCIENCE",
+	"url": "https://www.nature.com/articles/d41586-020-02833-0",
+	"likes": 25
 }

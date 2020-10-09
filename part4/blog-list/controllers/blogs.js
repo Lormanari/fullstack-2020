@@ -23,7 +23,8 @@ blogsRouter.post('/', async (req, res) => {
 	const body = req.body
 
 	const users = await User.find({})
-	const userID = users.map(user => user._id)[0]
+	const userID = users.map(user => user._id)[1]
+	const user = await User.findById(userID)
 	// if(body.title === undefined && body.url === undefined) {
 	// 	return res.status(400).json({
 	// 		error: 'blog title and url are missing'
@@ -38,11 +39,16 @@ blogsRouter.post('/', async (req, res) => {
 		author: body.author,
 		url: body.url,
 		likes,
-		user: userID,
+		user: user._id,
 	})
 
 
 	const savedBlog = await blog.save()
+
+	// save blog id to User notes field
+	user.blogs = user.blogs.concat(savedBlog._id)
+	await user.save()
+
 	res.json(savedBlog.toJSON())
 })
 
