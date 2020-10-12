@@ -29,7 +29,18 @@ usersRouter.post('/', async (request, response) => {
 
 	const savedUser = await user.save()
 
+	// const userForToken = {
+	// 	id: savedUser._id,
+	// }
+	// const token = jwt.sign(userForToken, process.env.SECRET)
+	// response.send({ token, savedUser })
 	response.json(savedUser)
+})
+
+usersRouter.delete('/:id', async (req, res) => {
+	await User.findByIdAndRemove(req.params.id)
+	res.status(204).end()
+
 })
 
 module.exports = usersRouter
