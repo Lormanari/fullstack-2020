@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjVmODQ5ZWU4NDA5OTcxZWYxOTEwODQ4YiIsImlhdCI6MTYwMjUyNjk4MH0.wo4-iZ54nYMR6SxWYECyefVGgBAfNmTdUmCNXECApAk
 
 {
-	"title": "Daily briefing: What Germany’s leading pandemic scientist says about what’s to come",
+	"title": "Ending hunger: science must stop neglecting smallholder farmers",
 	"author": "nature",
-	"url": "https://www.nature.com/articles/d41586-020-02879-0",
-	"likes": 12
+	"url": "https://www.nature.com/articles/d41586-020-02849-6",
+	"likes": 10
 }
