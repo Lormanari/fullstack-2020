@@ -1,3 +1,5 @@
+require('dotenv').config()
+const jwt = require('jsonwebtoken')
 const supertest = require('supertest')
 const mongoose = require('mongoose')
 const helper = require('./test_helper')
@@ -9,6 +11,7 @@ const Blog = require('../models/blog')
 
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
+// const Login = require('../models/login')
 
 beforeEach(async () => {
 	await Blog.deleteMany({})
@@ -46,24 +49,38 @@ test('the unique identifier property of the blog posts is named id', async () =>
 })
 
 describe('addition of a new blog', () => {
+	beforeEach(async () => {
+		await User.deleteMany({})
+
+		const passwordHash = await bcrypt.hash('sekret', 10)
+		const user = new User({ username: 'root', passwordHash })
+
+		await user.save()
+	})
+
 	test('a valid blog can be added', async () => {
+		const usersAtStart = await helper.usersInDb()
+		const defaultUser = usersAtStart[0]
+
+		const userForToken = {
+			username: defaultUser.username,
+			id: defaultUser.id,
+		}
+
+		const token = jwt.sign(userForToken, process.env.SECRET)
+
 		const newBlog = {
 			title: 'React patterns',
 			author: 'Michael Chan',
 			url: 'https://reactpatterns.com/',
 			likes: 7,
 		}
-
 		await api
 			.post('/api/blogs')
+			.set('Authorization', `bearer ${token}`)
 			.send(newBlog)
 			.expect(200)
 			.expect('Content-Type', /application\/json/)
-
-		// const response = await api.get('/api/blogs')
-		// expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
-		// const titles = response.body.map(r => r.title)
-		// expect(titles).toContain('React patterns')
 
 		//refactor
 		const blogsAtEnd = await helper.blogsInDb()
@@ -75,6 +92,16 @@ describe('addition of a new blog', () => {
 	})
 
 	test('missing likes property will get a default value 0', async () => {
+		const usersAtStart = await helper.usersInDb()
+		const defaultUser = usersAtStart[0]
+
+		const userForToken = {
+			username: defaultUser.username,
+			id: defaultUser.id,
+		}
+
+		const token = jwt.sign(userForToken, process.env.SECRET)
+
 		const newBlog = {
 			title: 'React patterns',
 			author: 'Michael Chan',
@@ -83,6 +110,7 @@ describe('addition of a new blog', () => {
 
 		await api
 			.post('/api/blogs')
+			.set('Authorization', `bearer ${token}`)
 			.send(newBlog)
 			.expect(200)
 			.expect('Content-Type', /application\/json/)
@@ -92,6 +120,16 @@ describe('addition of a new blog', () => {
 	})
 
 	test('400 Bad Request when title and url are missing', async () => {
+		const usersAtStart = await helper.usersInDb()
+		const defaultUser = usersAtStart[0]
+
+		const userForToken = {
+			username: defaultUser.username,
+			id: defaultUser.id,
+		}
+
+		const token = jwt.sign(userForToken, process.env.SECRET)
+
 		const newBlog = {
 			author: 'Michael Chan',
 			likes: 7,
@@ -99,24 +137,73 @@ describe('addition of a new blog', () => {
 
 		await api
 			.post('/api/blogs')
+			.set('Authorization', `bearer ${token}`)
 			.send(newBlog)
 			.expect(400)
+	})
+
+	test('401 Unauthorized if a token is not provided', async () => {
+		const newBlog = {
+			title: 'React patterns',
+			author: 'Michael Chan',
+			url: 'https://reactpatterns.com/',
+			likes: 7,
+		}
+
+		await api
+			.post('/api/blogs')
+			.send(newBlog)
+			.expect(401)
 	})
 })
 
 describe('deletion of a blog', () => {
+	beforeEach(async () => {
+		await User.deleteMany({})
+
+		const passwordHash = await bcrypt.hash('sekret', 10)
+		const user = new User({ username: 'root', passwordHash })
+
+		await user.save()
+	})
 	test('succeeds with status code 204 if id is valid', async () => {
+		const usersAtStart = await helper.usersInDb()
+		const defaultUser = usersAtStart[0]
+
+		const userForToken = {
+			username: defaultUser.username,
+			id: defaultUser.id,
+		}
+
+		const token = jwt.sign(userForToken, process.env.SECRET)
+
+		const newBlog = {
+			title: 'React patterns',
+			author: 'Michael Chan',
+			url: 'https://reactpatterns.com/',
+			likes: 7,
+			user: defaultUser.id
+		}
+		await api
+			.post('/api/blogs')
+			.set('Authorization', `bearer ${token}`)
+			.send(newBlog)
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
+
+
 		const blogsAtStart = await helper.blogsInDb()
-		const blogToDelete = blogsAtStart[0]
+		const blogToDelete = blogsAtStart[blogsAtStart.length - 1]
 
 		await api
 			.delete(`/api/blogs/${blogToDelete.id}`)
+			.set('Authorization', `bearer ${token}`)
 			.expect(204)
 
 		const blogsAtEnd = await helper.blogsInDb()
 
 		expect(blogsAtEnd).toHaveLength(
-			helper.initialBlogs.length - 1
+			helper.initialBlogs.length
 		)
 
 		const titles = blogsAtEnd.map(r => r.title)

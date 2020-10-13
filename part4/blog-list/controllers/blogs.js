@@ -31,7 +31,6 @@ blogsRouter.get('/:id', (req, res, next) => {
 
 blogsRouter.post('/', async (req, res) => {
 	const body = req.body
-	console.log(req)
 
 	// const users = await User.find({})
 	// const userID = users.map(user => user._id)[1]
@@ -51,7 +50,6 @@ blogsRouter.post('/', async (req, res) => {
 		likes,
 		user: user._id,
 	})
-
 
 	const savedBlog = await blog.save()
 
