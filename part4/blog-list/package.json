@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "test": "NODE_ENV=test jest --verbose --runInBand"
   },
-  "author": "Yurong ZHao",
+  "author": "Yurong Zhao",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.0.0",
