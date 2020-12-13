@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs/5f80c4bafde6cba93413ce6b/comments
+Content-Type: application/json
+
+{
+	"title": "A promising 3D-printing method gets flexible",
+	"author": "MATERIALS SCIENCE",
+	"url": "https://www.nature.com/articles/d41586-020-02833-0",
+	"likes": 37,
+	"comments": ["This is informative"]
+}
